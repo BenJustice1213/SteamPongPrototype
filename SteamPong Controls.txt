@@ -1,0 +1,7 @@
+Controls - Keyboard+Mouse / Xbox Controller
+
+Move - WASD / Left Thumbstick
+Rotate CCW - Left Click / LB
+Rotate CW - Right Click / RB
+Heal - Left Shift / LT
+Super Spin - Space / RT

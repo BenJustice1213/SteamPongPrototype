@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Enemy
+  - Pointer
+  - Boundary
+  - Pellet
+  - Paddle
+  - Ball
+  - Orb
+  - DefaultEffect
+  - DefaultPaddle
+  - FirePaddle
+  - Paddle1
+  - Paddle2
+  - Shield
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Boundary
+  - Water
+  - UI
+  - Player
+  - Enemy
+  - Paddle
+  - Ball
+  - Orb
+  - Poke
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
