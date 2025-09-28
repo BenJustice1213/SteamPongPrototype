@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] int enemiesToSpawn = 5;
     [SerializeField] int enemiesAlive = 0;
 
-    private int roundNumber = 1;
+    [SerializeField] int roundNumber = 1;
 
     public TextMeshProUGUI roundText;
 
@@ -24,9 +24,11 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         StartCoroutine(StartRound());
+        
+    
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (enemiesAlive <= 0 && !roundInProgress)
         {
@@ -63,12 +65,16 @@ public class EnemySpawner : MonoBehaviour
         if (roundNumber == 5)
         {
             Debug.Log("Fire Ability Obtained!");
-            firePowerObtained = true;
+            
             Vector2 spawnPos = new Vector2(
                 Random.Range(spawnAreaMin.x, spawnAreaMax.x),
                 Random.Range(spawnAreaMin.y, spawnAreaMax.y)
             );
-            Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+            GameObject BossLevel5 = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+            enemiesAlive++;
+            Enemy BossLevel5script = BossLevel5.GetComponent<Enemy>();
+            BossLevel5script.OnDestroyEvent += EnemyDestroyed;
+            roundInProgress = false;
             yield break;
         }
         else
@@ -98,6 +104,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyScript.OnDestroyEvent += EnemyDestroyed;
                 
             }
+            
         }
         Debug.Log($"Spawned {count} enemies.");
     }
@@ -105,6 +112,11 @@ public class EnemySpawner : MonoBehaviour
     private void EnemyDestroyed()
     {
         enemiesAlive--;
+
+        if (roundNumber == 5)
+        {
+            firePowerObtained = true;
+        }
         Debug.Log($"Enemy destroyed, {enemiesAlive} remaining.");
     }
 }

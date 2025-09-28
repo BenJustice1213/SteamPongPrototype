@@ -84,7 +84,7 @@ public class Ball : MonoBehaviour
             if (enemyHealth != null)
             {
                 int damage = isFireBall ? fireDamage : defaultDamage;
-                enemyHealth.TakeDamage(damage);
+                //enemyHealth.TakeDamage(damage);
             }
 
             ContactPoint2D contact = collision.GetContact(0);
