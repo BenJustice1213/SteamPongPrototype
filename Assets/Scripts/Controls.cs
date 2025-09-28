@@ -220,27 +220,21 @@ public class PlayerController : MonoBehaviour
             // Don't add charge while double spin is active
             return;
         }
-        if (paddle.CompareTag("Paddle1"))
+        if (paddle.CompareTag("Paddle1") || paddle.CompareTag("FirePaddle"))
         {
             if (paddle1Charge < maxCharge)
             {
                 paddle1Charge++;
-                Debug.Log($"AddCharge called for Paddle1 - Current charge: {paddle1Charge} / {maxCharge}");
                 UpdateUI();
             }
         }
-        else if (paddle.CompareTag("Paddle2"))
+        else if (paddle.CompareTag("Paddle2") || paddle.CompareTag("FirePaddle"))
         {
             if (paddle2Charge < maxCharge)
             {
                 paddle2Charge++;
-                Debug.Log($"AddCharge called for Paddle2 - Current charge: {paddle2Charge} / {maxCharge}");
                 UpdateUI();
             }
-        }
-        else
-        {
-            Debug.Log($"AddCharge called with unknown paddle tag: {paddle.tag}");
         }
     }
 
