@@ -80,6 +80,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapPaddle1"",
+                    ""type"": ""Button"",
+                    ""id"": ""19896f5b-5cdf-4c24-910d-ed321150fc2f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapPaddle2"",
+                    ""type"": ""Button"",
+                    ""id"": ""33c9da66-b584-428d-9e70-5c6a208f7d3b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -267,6 +285,50 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53bec7ab-9191-4a4c-86c9-ce7d518a5ef0"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapPaddle1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""64496914-1071-49c0-95b8-226fb3c7cb4a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapPaddle1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82d4ea34-dfa2-435d-b45e-2cc6247131e7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapPaddle2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1285506-6eba-46e3-b7b8-42d7cf29fa9c"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwapPaddle2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -533,6 +595,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Heal = m_Player.FindAction("Heal", throwIfNotFound: true);
         m_Player_DoubleSpin = m_Player.FindAction("DoubleSpin", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_SwapPaddle1 = m_Player.FindAction("SwapPaddle1", throwIfNotFound: true);
+        m_Player_SwapPaddle2 = m_Player.FindAction("SwapPaddle2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -615,6 +679,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Heal;
     private readonly InputAction m_Player_DoubleSpin;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_SwapPaddle1;
+    private readonly InputAction m_Player_SwapPaddle2;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -625,6 +691,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Heal => m_Wrapper.m_Player_Heal;
         public InputAction @DoubleSpin => m_Wrapper.m_Player_DoubleSpin;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @SwapPaddle1 => m_Wrapper.m_Player_SwapPaddle1;
+        public InputAction @SwapPaddle2 => m_Wrapper.m_Player_SwapPaddle2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -652,6 +720,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @SwapPaddle1.started += instance.OnSwapPaddle1;
+            @SwapPaddle1.performed += instance.OnSwapPaddle1;
+            @SwapPaddle1.canceled += instance.OnSwapPaddle1;
+            @SwapPaddle2.started += instance.OnSwapPaddle2;
+            @SwapPaddle2.performed += instance.OnSwapPaddle2;
+            @SwapPaddle2.canceled += instance.OnSwapPaddle2;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -674,6 +748,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @SwapPaddle1.started -= instance.OnSwapPaddle1;
+            @SwapPaddle1.performed -= instance.OnSwapPaddle1;
+            @SwapPaddle1.canceled -= instance.OnSwapPaddle1;
+            @SwapPaddle2.started -= instance.OnSwapPaddle2;
+            @SwapPaddle2.performed -= instance.OnSwapPaddle2;
+            @SwapPaddle2.canceled -= instance.OnSwapPaddle2;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -807,6 +887,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnHeal(InputAction.CallbackContext context);
         void OnDoubleSpin(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSwapPaddle1(InputAction.CallbackContext context);
+        void OnSwapPaddle2(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

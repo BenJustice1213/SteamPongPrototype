@@ -5,84 +5,122 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Ball : MonoBehaviour
 {
+    [Header("Speed Settings")]
     public float initialSpeed = 10f;
     public float boostSpeed = 25f;
     public float aimAssistStrength = 0.1f;
+
+    [Header("Damage Settings")]
+    public int defaultDamage = 20;
+    public int fireDamage = 40;
+
+    [Header("Effects")]
+    public GameObject defaultEffect; // Assign in inspector
+    public GameObject fireEffect;    // Assign in inspector
+
     public PlayerController playerController;
 
     private Rigidbody2D rb;
-    private Transform enemy;
     private Collider2D enemyCollider;
     private bool isPaddleBounce = false;
+    private bool isFireBall = false;
+    public bool IsFireBall => isFireBall;
+
 
     private HashSet<GameObject> recentlyCharged = new HashSet<GameObject>();
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy")?.transform;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        if (enemy != null)
-        {
-            enemyCollider = enemy.GetComponent<Collider2D>();
-            if (enemyCollider != null)
-            {
-                Physics2D.IgnoreCollision(GetComponent<Collider2D>(), enemyCollider, true);
-            }
-        }
+        // Ensure effects are off initially
+        if (defaultEffect != null) defaultEffect.SetActive(false);
+        if (fireEffect != null) fireEffect.SetActive(false);
 
+        // Initial random velocity
         if (rb.velocity == Vector2.zero)
-        {
             rb.velocity = Random.insideUnitCircle.normalized * initialSpeed;
-        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject obj = collision.gameObject;
 
-        if (obj.CompareTag("Paddle1") || obj.CompareTag("Paddle2"))
-        {
-            Debug.Log($"Ball collided with {obj.tag}");
+        // --- FIRE PADDLE CHECK ---
+        bool isFirePaddleHit = obj.CompareTag("FirePaddle");
 
-            if (!recentlyCharged.Contains(obj))
+        // Paddle collisions (normal or fire)
+        if (obj.CompareTag("Paddle1") || obj.CompareTag("Paddle2") || isFirePaddleHit)
+        {
+            // Debug log
+            Debug.Log($"Ball hit {obj.name}, tag: {obj.tag}");
+
+            // Fire effect logic
+            if (isFirePaddleHit)
             {
-                GameObject player = GameObject.FindWithTag("Player");
-                if (player != null)
-                {
-                    PlayerController controller = player.GetComponent<PlayerController>();
-                    if (controller != null)
-                    {
-                        controller.AddCharge(obj);
-                        recentlyCharged.Add(obj);
-                        StartCoroutine(RemoveChargeCooldown(obj, 0.5f));
-                    }
-                }
-            }
-            ContactPoint2D contact = collision.GetContact(0);
-            DeflectTowardsEnemy(contact.normal);
-        }
-        else if (obj.CompareTag("Shield"))
-        {
-            ContactPoint2D contact = collision.GetContact(0);
-            DeflectTowardsEnemy(contact.normal);
-        }
-        else if (obj.CompareTag("Boundary"))
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            if (!isPaddleBounce)
-            {
-                rb.velocity = rb.velocity.normalized * initialSpeed;
+                isFireBall = true;
+                if (fireEffect != null) fireEffect.SetActive(true);
+                if (defaultEffect != null) defaultEffect.SetActive(false);
             }
             else
             {
-                isPaddleBounce = false;
+                if (!isFireBall)
+                {
+                    if (defaultEffect != null) defaultEffect.SetActive(true);
+                    if (fireEffect != null) fireEffect.SetActive(false);
+                }
             }
+
+            // Add charge to paddle
+            if (!recentlyCharged.Contains(obj) && playerController != null)
+            {
+                playerController.AddCharge(obj);
+                recentlyCharged.Add(obj);
+                StartCoroutine(RemoveChargeCooldown(obj, 0.5f));
+            }
+
+            // Deflect the ball
+            ContactPoint2D contact = collision.GetContact(0);
+            DeflectTowardsEnemy(contact.normal);
+            return;
         }
+
+        // Enemy collisions
+        if (obj.CompareTag("Enemy"))
+        {
+            Enemy enemyHealth = obj.GetComponent<Enemy>();
+            if (enemyHealth != null)
+            {
+                int damage = isFireBall ? fireDamage : defaultDamage;
+                enemyHealth.TakeDamage(damage);
+            }
+
+            ContactPoint2D contact = collision.GetContact(0);
+            DeflectTowardsEnemy(contact.normal);
+            return;
+        }
+
+        // Shield collisions
+        if (obj.CompareTag("Shield"))
+        {
+            ContactPoint2D contact = collision.GetContact(0);
+            DeflectTowardsEnemy(contact.normal);
+            return;
+        }
+
+        // Boundary collisions
+        if (obj.CompareTag("Boundary"))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Other collisions
+        if (!isPaddleBounce)
+            rb.velocity = rb.velocity.normalized * initialSpeed;
+        else
+            isPaddleBounce = false;
     }
 
     IEnumerator RemoveChargeCooldown(GameObject paddle, float delay)
@@ -98,23 +136,13 @@ public class Ball : MonoBehaviour
 
         isPaddleBounce = true;
 
-        if (enemyCollider != null)
-        {
-            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), enemyCollider, false);
-        }
-
         Vector2 directionToEnemy = GetDirectionToNearestEnemy();
         reflected = Vector2.Lerp(reflected, directionToEnemy, aimAssistStrength);
 
         rb.velocity = reflected * boostSpeed;
 
-        Transform effect = transform.Find("DefaultEffect");
-        if (effect != null)
-        {
-            effect.gameObject.SetActive(true);
-        }
-
-        gameObject.tag = "DefaultEffect";
+        // Enable default effect if not fire ball
+        if (!isFireBall && defaultEffect != null) defaultEffect.SetActive(true);
     }
 
     Vector2 GetDirectionToNearestEnemy()
@@ -140,13 +168,13 @@ public class Ball : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        // Orb damage
         if (collision.CompareTag("Orb"))
         {
             OrbHealth orbHealth = collision.GetComponent<OrbHealth>();
             if (orbHealth != null)
-            {
-                orbHealth.TakeDamage(20);
-            }
+                orbHealth.TakeDamage(defaultDamage);
+
             Destroy(gameObject);
         }
     }

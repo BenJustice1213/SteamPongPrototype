@@ -110,10 +110,17 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("Boundary"))
         {
             wanderDirection = -wanderDirection;
+            return;
         }
-        else if (collision.gameObject.CompareTag("DefaultEffect"))
+
+        // Damage from ball
+        Ball ball = collision.gameObject.GetComponent<Ball>();
+        if (ball != null)
         {
-            TakeDamage(30);
+            int damage = ball.IsFireBall ? ball.fireDamage : ball.defaultDamage;
+            TakeDamage(damage);
+
+            // Destroy the ball after hitting the enemy
             Destroy(collision.gameObject);
         }
     }
@@ -130,7 +137,7 @@ public class Enemy : MonoBehaviour
         rb.velocity = direction * ballSpeed;
     }
 
-    void TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);

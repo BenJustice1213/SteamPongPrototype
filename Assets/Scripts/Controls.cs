@@ -14,6 +14,13 @@ public class PlayerController : MonoBehaviour
 
     public GameObject paddle1;
     public GameObject paddle2;
+
+    public GameObject firePaddle1;
+    public GameObject firePaddle2;
+
+    private GameObject currentPaddle1;
+    private GameObject currentPaddle2;
+
     public GameObject shield;
 
     public GameObject healIconPaddle1;
@@ -42,6 +49,11 @@ public class PlayerController : MonoBehaviour
     private Sprite[] paddle1ChargeSprites = new Sprite[6];
     private Sprite[] paddle2ChargeSprites = new Sprite[6];
 
+    public GameObject paddle1FireOverlay;
+    public GameObject paddle2FireOverlay;
+
+
+
     public float attackCooldown;
     private bool isCooled = true;
 
@@ -62,16 +74,27 @@ public class PlayerController : MonoBehaviour
     public bool IsPaddle2Charged => paddle2Charge >= maxCharge;
     public bool IsDoubleReady => IsPaddle1Charged && IsPaddle2Charged;
 
+
     void Start()
     {
+        currentPaddle1 = paddle1;
+        currentPaddle2 = paddle2;
+
+        currentPaddle1.SetActive(true);
+        currentPaddle2.SetActive(true);
+
+        firePaddle1.SetActive(false);
+        firePaddle2.SetActive(false);
+
         inputActions = new PlayerInputActions();
         inputActions.Enable();
 
-        // Movement
+        inputActions.Player.SwapPaddle1.performed += _ => SwapPaddle(1);
+        inputActions.Player.SwapPaddle2.performed += _ => SwapPaddle(2);
+
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
 
-        // You don't have a Vector2 Rotate — these are buttons now:
         inputActions.Player.RotateCCW.performed += _ => spinLeftHeld = true;
         inputActions.Player.RotateCCW.canceled += _ => spinLeftHeld = false;
 
@@ -183,6 +206,11 @@ public class PlayerController : MonoBehaviour
 
             UpdateUI();
         }
+
+        //Fire aura around UI
+        paddle1FireOverlay.SetActive(firePaddle1.activeSelf);
+        paddle2FireOverlay.SetActive(firePaddle2.activeSelf);
+
     }
 
     public void AddCharge(GameObject paddle)
@@ -266,4 +294,25 @@ public class PlayerController : MonoBehaviour
         CooldownStart();
     }
 
+    private void SwapPaddle(int paddleNumber)
+    {
+        if (paddleNumber == 1)
+        {
+            bool isNormal = currentPaddle1.activeSelf;
+
+            currentPaddle1.SetActive(!isNormal);
+            firePaddle1.SetActive(isNormal);
+
+            paddle1 = isNormal ? firePaddle1 : currentPaddle1;
+        }
+        else if (paddleNumber == 2)
+        {
+            bool isNormal = currentPaddle2.activeSelf;
+
+            currentPaddle2.SetActive(!isNormal);
+            firePaddle2.SetActive(isNormal);
+
+            paddle2 = isNormal ? firePaddle2 : currentPaddle2;
+        }
+    }
 }
