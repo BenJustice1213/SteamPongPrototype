@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject paddle1FireOverlay;
     public GameObject paddle2FireOverlay;
+    
+    public EnemySpawner enemySpawner;
 
 
 
@@ -88,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
         inputActions = new PlayerInputActions();
         inputActions.Enable();
+
 
         inputActions.Player.SwapPaddle1.performed += _ => SwapPaddle(1);
         inputActions.Player.SwapPaddle2.performed += _ => SwapPaddle(2);
@@ -290,23 +293,29 @@ public class PlayerController : MonoBehaviour
 
     private void SwapPaddle(int paddleNumber)
     {
-        if (paddleNumber == 1)
+        
+        if (enemySpawner.firePowerObtained)
         {
-            bool isNormal = currentPaddle1.activeSelf;
+            if (paddleNumber == 1)
+            {
+                bool isNormal = currentPaddle1.activeSelf;
 
-            currentPaddle1.SetActive(!isNormal);
-            firePaddle1.SetActive(isNormal);
+                currentPaddle1.SetActive(!isNormal);
+                firePaddle1.SetActive(isNormal);
 
-            paddle1 = isNormal ? firePaddle1 : currentPaddle1;
+                paddle1 = isNormal ? firePaddle1 : currentPaddle1;
+            }
+            else if (paddleNumber == 2)
+            {
+                bool isNormal = currentPaddle2.activeSelf;
+
+                currentPaddle2.SetActive(!isNormal);
+                firePaddle2.SetActive(isNormal);
+
+                paddle2 = isNormal ? firePaddle2 : currentPaddle2;
+            }
+
         }
-        else if (paddleNumber == 2)
-        {
-            bool isNormal = currentPaddle2.activeSelf;
-
-            currentPaddle2.SetActive(!isNormal);
-            firePaddle2.SetActive(isNormal);
-
-            paddle2 = isNormal ? firePaddle2 : currentPaddle2;
-        }
+        else { Debug.Log("Fire Power not obtained."); }
     }
 }

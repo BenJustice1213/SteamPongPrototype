@@ -468,9 +468,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1549305745422631765, guid: 10a3108b9085bb44ab58b24aeaebb868, type: 3}
+  bossPrefab: {fileID: 5061835830355368482, guid: 392c61591ba68a94fb0b04098af948a0, type: 3}
   spawnAreaMin: {x: -45, y: 20}
   spawnAreaMax: {x: 45, y: 30}
   roundText: {fileID: 1756753559}
+  firePowerObtained: 0
 --- !u!4 &525886345
 Transform:
   m_ObjectHideFlags: 0
@@ -2710,6 +2712,7 @@ MonoBehaviour:
   paddle2UIImage: {fileID: 1879963232}
   paddle1FireOverlay: {fileID: 1390568632}
   paddle2FireOverlay: {fileID: 1071976909}
+  enemySpawner: {fileID: 525886344}
   attackCooldown: 20
 --- !u!4 &2774685954300007454
 Transform:
