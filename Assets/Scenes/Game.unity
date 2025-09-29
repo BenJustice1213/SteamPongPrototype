@@ -471,6 +471,9 @@ MonoBehaviour:
   bossPrefab: {fileID: 5061835830355368482, guid: 392c61591ba68a94fb0b04098af948a0, type: 3}
   spawnAreaMin: {x: -45, y: 20}
   spawnAreaMax: {x: 45, y: 30}
+  enemiesToSpawn: 5
+  enemiesAlive: 0
+  roundNumber: 1
   roundText: {fileID: 1756753559}
   firePowerObtained: 0
 --- !u!4 &525886345
@@ -983,7 +986,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 77d214b41436e534da48e7969dcd7bf5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ed19687a0069b144898470b793180f85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1003,8 +1006,8 @@ Transform:
   m_GameObject: {fileID: 746414999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.43, y: 7.67, z: 0}
-  m_LocalScale: {x: 67.58066, y: 42.279198, z: 42.279198}
+  m_LocalPosition: {x: -0.4, y: 7.7, z: 0}
+  m_LocalScale: {x: 9.631279, y: 6.0254326, z: 6.0254326}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2777,7 +2780,7 @@ Transform:
   m_GameObject: {fileID: 4307700446803010347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.9, y: 9.1, z: 0}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
   m_LocalScale: {x: 1.5162554, y: 1.5162554, z: 1.5162554}
   m_ConstrainProportionsScale: 0
   m_Children:
