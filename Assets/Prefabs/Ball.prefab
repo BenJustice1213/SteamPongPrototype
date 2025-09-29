@@ -166,7 +166,7 @@ MonoBehaviour:
   initialSpeed: 35
   boostSpeed: 45
   aimAssistStrength: 1
-  defaultDamage: 100
+  defaultDamage: 20
   fireDamage: 40
   defaultEffect: {fileID: 2404805159307811748}
   fireEffect: {fileID: 5352467728610726440}
