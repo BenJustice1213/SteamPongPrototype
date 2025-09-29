@@ -108,7 +108,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 4827d8e56892745419dee606fac67681, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -140,11 +140,11 @@ MonoBehaviour:
   ballSpeed: 40
   maxHealth: 200
   spriteRenderer: {fileID: 2195895136466900761}
-  health100: {fileID: 21300000, guid: 24503eeeb1148354f8fc2aa3e7d2fed7, type: 3}
-  health75: {fileID: 21300000, guid: b7b926819b394c249b30256643f1d88d, type: 3}
-  health50: {fileID: 21300000, guid: 451582cd70514704abf8ce880ec1f49a, type: 3}
-  health25: {fileID: 21300000, guid: cc0b16e0dd5f87c49a2c1a549dbe61ec, type: 3}
-  health10: {fileID: 21300000, guid: 4827d8e56892745419dee606fac67681, type: 3}
+  health100: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
+  health75: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
+  health50: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
+  health25: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
+  health10: {fileID: 21300000, guid: a85f526c2b0077044ae999bbf10b31e8, type: 3}
 --- !u!61 &4681261528142602070
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -181,7 +181,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 1.5}
+    oldSize: {x: 2.31, y: 1.92}
     newSize: {x: 1.5, y: 1.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
